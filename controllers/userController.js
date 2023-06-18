@@ -18,8 +18,10 @@ module.exports.register = async (req, res, next) => {
             phoneNumber,
             cnic
         });
-        delete user.password;
-        return res.json({ status: true, user });
+
+        const userObject = user.toObject();
+        delete userObject.password;
+        return res.json({ status: true, user: userObject });
 
     } catch (ex) {
         return res.json({ status: false, error: ex.message });
@@ -48,8 +50,12 @@ module.exports.login = async (req, res, next) => {
             return res.json({ message: "Your profile is not verified by admin", status: false });
         }
 
-        delete user.password;
-        return res.json({ status: true, user, token: `Bearer ${generateToken(user._id.toString())}` });
+
+        const userObject = user.toObject();
+        delete userObject.password;
+
+
+        return res.json({ status: true, user: userObject, token: `Bearer ${generateToken(user._id.toString())}` });
 
     } catch (ex) {
         return res.json({ status: false, error: ex.message });
@@ -57,6 +63,27 @@ module.exports.login = async (req, res, next) => {
     }
 };
 
+
+module.exports.updateUserStatus = async (req, res, next) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({ message: "User not found", status: false });
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { email: req.body.email },req.body,{new: true});
+        
+        const userObject = updatedUser.toObject();
+        delete userObject.password;
+        return res.json({ status: true, user: userObject });
+
+    } catch (ex) {
+        return res.json({ status: false, error: ex.message });
+        next(ex);
+    }
+};
 
 
 module.exports.getAllUsers = async (req, res, next) => {
@@ -74,7 +101,7 @@ module.exports.getAllUsers = async (req, res, next) => {
 
 module.exports.getAllPendingUsers = async (req, res, next) => {
     try {
-        const users = await User.find({status: "pending"});
+        const users = await User.find({ status: "pending" });
         return res.json({ status: true, users });
 
     } catch (ex) {

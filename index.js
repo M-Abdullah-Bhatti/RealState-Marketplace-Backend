@@ -2,12 +2,20 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
+const cloudinary = require("cloudinary");
 
 
 require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
+
+// Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const userRoute = require("./routers/userRoutes")
 app.use("/api/user", userRoute);

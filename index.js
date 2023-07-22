@@ -1,12 +1,14 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+const express = require("express"); //server
+const cors = require("cors"); //errors
+const mongoose = require("mongoose"); //database
 const app = express();
-const cloudinary = require("cloudinary");
+const cloudinary = require("cloudinary");  //image
 
 
 require("dotenv").config();
 
+app.use(express.json({ limit: "50mb", extended: true }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cors());
 app.use(express.json());
 
@@ -19,7 +21,7 @@ cloudinary.config({
 
 const userRoute = require("./routers/userRoutes")
 app.use("/api/user", userRoute);
-
+//database connection
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -30,7 +32,7 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log(err.message);
     });
 
-
+//server listeining on port 5000
 const server = app.listen(5000, () =>
     console.log(`Server started on 5000`)
 );

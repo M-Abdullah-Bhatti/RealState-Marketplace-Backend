@@ -1,65 +1,53 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-   plotType:{
+const propertySchema = new mongoose.Schema({
+  plotType: {
     type: String,
     required: true,
+  },
 
-   },
-
-   price:{
+  price: {
     type: Number,
     required: true,
+  },
 
-   },
-
-   location:{
+  location: {
     type: String,
     required: true,
+  },
 
-   },
-
-   area:{
+  area: {
     type: String,
     required: true,
+  },
 
-   },
-
-   rooms:{
+  rooms: {
     type: String,
-    
-   },
+  },
 
-   description:{
-    type:String,
-    required:true,
-
-   },
-
-   purpose:{
+  description: {
     type: String,
     required: true,
+  },
 
-   },
-
-   propertyImage:{
+  purpose: {
     type: String,
-
-   },
-
-   city:{
-    type: String,
-    required:true,
-
-   },
-
-   propertyStatus:{
-    type:String,
     required: true,
+  },
 
-   },
+  propertyImage: {
+    type: String,
+  },
 
-})
+  city: {
+    type: String,
+    required: true,
+  },
 
+  propertyStatus: {
+    type: String,
+    default: "pending",
+  },
+});
 
-module.exports = mongoose.model("Property", propertySchema)
+module.exports = mongoose.model("Property", propertySchema);

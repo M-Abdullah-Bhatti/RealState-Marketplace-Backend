@@ -15,3 +15,37 @@ module.exports.registerProperty = async (req, res, next) => {
     next(ex);
   }
 };
+
+
+module.exports.updatePropertyStatus = async (req, res, next) => {
+  try {
+      const { email } = req.body;
+      const prop = await Property.findOne({ email });
+      if (!prop) {
+          return res.json({ message: "Property not found", status: false });
+      }
+
+      const updatedProperty = await Property.findOneAndUpdate(
+          { email: req.body.email }, req.body, { new: true });
+
+      const propObject = updatedProperty.toObject();
+      delete propObject.password;
+      return res.json({ status: true, user: propObject });
+
+  } catch (ex) {
+      return res.json({ status: false, error: ex.message });
+      next(ex);
+  }
+};
+
+
+module.exports.getAllPendingProperty = async (req, res, next) => {
+  try {
+      const props = await Property.find({ status: "pending" });
+      return res.json({ status: true, props });
+
+  } catch (ex) {
+      return res.json({ status: false, error: ex.message });
+      next(ex);
+  }
+};

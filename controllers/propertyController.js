@@ -38,6 +38,16 @@ module.exports.updatePropertyStatus = async (req, res, next) => {
   }
 };
 
+module.exports.getAllProperty = async (req, res, next) => {
+  try {
+      const props = await Property.find({ status: "active" });
+      return res.json({ status: true, props });
+
+  } catch (ex) {
+      return res.json({ status: false, error: ex.message });
+      next(ex);
+  }
+};
 
 module.exports.getAllPendingProperty = async (req, res, next) => {
   try {

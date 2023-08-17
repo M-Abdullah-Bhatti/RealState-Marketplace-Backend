@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const propertySchema = new mongoose.Schema({
-  city: {
-    type: String,
-    required: true,
-  },
-
   category: {
     type: String,
     required: true,

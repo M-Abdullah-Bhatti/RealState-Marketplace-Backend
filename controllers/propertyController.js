@@ -1,6 +1,13 @@
 const Property = require("../models/PropertyModel");
 const cloudinary = require("cloudinary");
 
+// API's to create:
+// 1. Register the Property
+// 2. Get all pending properties
+// 3. Get all active properties
+// 4. Change the property status
+// 5. Get the detail of a specific property
+
 module.exports.registerProperty = async (req, res, next) => {
   try {
     const property = await Property.create(req.body);
@@ -16,46 +23,45 @@ module.exports.registerProperty = async (req, res, next) => {
   }
 };
 
-
 module.exports.updatePropertyStatus = async (req, res, next) => {
   try {
-      const { email } = req.body;
-      const prop = await Property.findOne({ email });
-      if (!prop) {
-          return res.json({ message: "Property not found", status: false });
-      }
+    const { email } = req.body;
+    const prop = await Property.findOne({ email });
+    if (!prop) {
+      return res.json({ message: "Property not found", status: false });
+    }
 
-      const updatedProperty = await Property.findOneAndUpdate(
-          { email: req.body.email }, req.body, { new: true });
+    const updatedProperty = await Property.findOneAndUpdate(
+      { email: req.body.email },
+      req.body,
+      { new: true }
+    );
 
-      const propObject = updatedProperty.toObject();
-      delete propObject.password;
-      return res.json({ status: true, user: propObject });
-
+    const propObject = updatedProperty.toObject();
+    delete propObject.password;
+    return res.json({ status: true, user: propObject });
   } catch (ex) {
-      return res.json({ status: false, error: ex.message });
-      next(ex);
+    return res.json({ status: false, error: ex.message });
+    next(ex);
   }
 };
 
 module.exports.getAllProperty = async (req, res, next) => {
   try {
-      const props = await Property.find({ status: "active" });
-      return res.json({ status: true, props });
-
+    const props = await Property.find({ status: "active" });
+    return res.json({ status: true, props });
   } catch (ex) {
-      return res.json({ status: false, error: ex.message });
-      next(ex);
+    return res.json({ status: false, error: ex.message });
+    next(ex);
   }
 };
 
 module.exports.getAllPendingProperty = async (req, res, next) => {
   try {
-      const props = await Property.find({ status: "pending" });
-      return res.json({ status: true, props });
-
+    const props = await Property.find({ status: "pending" });
+    return res.json({ status: true, props });
   } catch (ex) {
-      return res.json({ status: false, error: ex.message });
-      next(ex);
+    return res.json({ status: false, error: ex.message });
+    next(ex);
   }
 };

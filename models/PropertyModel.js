@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
 
 const propertySchema = new mongoose.Schema({
-  plotType: {
+  city: {
     type: String,
     required: true,
   },
 
-  price: {
-    type: Number,
+  category: {
+    type: String,
     required: true,
   },
 
-  location: {
+  // category must be in of the following: house, plot, flat, shops, commercial
+
+  propertyStatus: {
+    type: String,
+    default: "pending",
+  },
+
+  description: {
     type: String,
     required: true,
   },
@@ -21,33 +28,65 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
 
-  rooms: {
-    type: String,
-  },
-
-  description: {
+  location: {
     type: String,
     required: true,
   },
 
-  purpose: {
+  address: {
     type: String,
     required: true,
   },
 
-  propertyImage: {
+  orienten: {
     type: String,
+    require: true,
   },
 
-  city: {
-    type: String,
+  // orienten must be in of the following: north, south, east, west
+
+  bedroom: {
+    type: Number,
+  },
+
+  washroom: {
+    type: Number,
+  },
+
+  kitchen: {
+    type: Number,
+  },
+
+  totalTokens: {
+    type: Number,
     required: true,
   },
 
-  propertyStatus: {
-    type: String,
-    default: "pending",
-  },
+  // ignore the images and property doc image for now
+
+  // images: [
+  //   {
+  //     public_id: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //     url: {
+  //       type: String,
+  //       required: true,
+  //     },
+  //   },
+  // ],
+
+  // propertyDocument: {
+  //   public_id: {
+  //     type: String,
+  //     required: true,
+  //   },
+  //   url: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
 });
 
 module.exports = mongoose.model("Property", propertySchema);

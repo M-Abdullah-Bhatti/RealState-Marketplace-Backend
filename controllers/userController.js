@@ -79,12 +79,12 @@ module.exports.login = async (req, res, next) => {
       });
     }
 
-    if (user.status !== "active") {
-      return res.json({
-        message: "Your profile is not verified by admin",
-        status: false,
-      });
-    }
+    // if (user.status !== "active") {
+    //   return res.json({
+    //     message: "Your profile is not verified by admin",
+    //     status: false,
+    //   });
+    // }
 
     const userObject = user.toObject();
     delete userObject.password;

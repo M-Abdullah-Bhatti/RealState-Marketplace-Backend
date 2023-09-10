@@ -57,6 +57,27 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
 
+  tokenPrice: {
+    type: Number,
+    required: true,
+  },
+
+  propertyOwner: [
+    {
+      ownerAddress: {
+        type: String,
+        required: true,
+      },
+      tokenHolder: {
+        type: String,
+        required: true,
+      },
+      perTokenPrice: {
+        type: String,
+      },
+    },
+  ],
+
   // ignore the images and property doc image for now
 
   // images: [

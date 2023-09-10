@@ -3,6 +3,19 @@ const cloudinary = require("cloudinary");
 
 module.exports.registerProperty = async (req, res, next) => {
   try {
+    if (!walletAddress) {
+      return res
+        .status(400)
+        .json({ status: false, message: "wallet address is not given" });
+    }
+    let owner = [
+      {
+        ownerAddress: req.body.walletAddress,
+        tokenHolder: req.body.totalTokens,
+        perTokenPrice: req.body.tokenPrice,
+      },
+    ];
+    req.body.propertyOwner = owner;
     const property = await Property.create(req.body);
 
     if (property) {

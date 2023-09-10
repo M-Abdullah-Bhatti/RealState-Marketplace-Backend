@@ -34,7 +34,7 @@ mongoose
     console.log("DB Connetion Successfull");
   })
   .catch((err) => {
-    console.log(err.message);
+    console.log("err: ", err.message);
   });
 
 //server listeining on port 5000

@@ -20,9 +20,11 @@ cloudinary.config({
 
 const userRoute = require("./routers/userRoutes");
 const propertyRoute = require("./routers/propertyRoutes");
+const propertyAdRoute = require("./routers/propertyAdRoutes");
 
 app.use("/api/user", userRoute);
 app.use("/api/property", propertyRoute);
+app.use("/api/propertyAd", propertyAdRoute);
 
 //database connection
 mongoose
@@ -39,3 +41,6 @@ mongoose
 
 //server listeining on port 5000
 const server = app.listen(5000, () => console.log(`Server started on 5000`));
+
+// 0xD57577BC6cdcF9a7EC9e7536BacB2C6c154CF521
+// 0xC671bfA8f33d3D8AB7252E598b936F06A8d74415

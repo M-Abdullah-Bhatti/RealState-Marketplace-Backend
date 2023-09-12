@@ -78,6 +78,23 @@ const propertySchema = new mongoose.Schema({
     },
   ],
 
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users",
+    required: true,
+  },
+
+  listedBy: [
+    {
+      type: String,
+    },
+  ],
+
+  isListed: {
+    type: Boolean,
+    default: false,
+  },
+
   // ignore the images and property doc image for now
 
   // images: [

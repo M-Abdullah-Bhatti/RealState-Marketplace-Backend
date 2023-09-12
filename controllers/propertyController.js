@@ -103,7 +103,14 @@ module.exports.postPropertyAd = async (req, res, next) => {
       });
     }
 
-    // const propertyAd = await PropertyAd.create(req.body);
+    property.isListed = true;
+    property.listedBy.push(walletAddress);
+
+    const savedProperty = await property.save();
+    if (savedProperty) {
+      return res.status(200).json({ success: true, savedProperty });
+    }
+    // const property = await PropertyAd.create(req.body);
 
     // if (propertyAd) {
     //   return res.status(200).json({ success: true, propertyAd });

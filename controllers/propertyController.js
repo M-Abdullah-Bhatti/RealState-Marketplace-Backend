@@ -3,7 +3,6 @@ const cloudinary = require("cloudinary");
 
 module.exports.registerProperty = async (req, res, next) => {
   try {
-    // console.log("body: ", req.body);
     if (!req.body.walletAddress) {
       return res
         .status(400)
@@ -51,7 +50,6 @@ module.exports.getAllPendingProperty = async (req, res, next) => {
 module.exports.updatePropertyStatus = async (req, res, next) => {
   try {
     const { id } = req.body;
-    console.log({ id });
     const property = await Property.findById(id);
 
     if (!property) {
@@ -283,9 +281,6 @@ module.exports.buyPropertyToken = async (req, res, next) => {
         (address) => address !== ownerWalletAddress
       );
     }
-
-    // console.log({ property });
-    // return res.json({ property });
 
     const savedProperty = await property.save();
     if (!savedProperty) {

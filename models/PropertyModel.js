@@ -75,6 +75,10 @@ const propertySchema = new mongoose.Schema({
       perTokenPrice: {
         type: String,
       },
+      currentListedTokens: {
+        type: String,
+        default: "0",
+      },
     },
   ],
 

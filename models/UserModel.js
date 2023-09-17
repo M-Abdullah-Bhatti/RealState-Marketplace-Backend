@@ -25,35 +25,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
-  status: {
-    type: String,
-    default: "pending",
-  },
-  cnic: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
-  cnicFront: {
-    public_id: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
-  cnicBack: {
-    public_id: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
 });
 
 module.exports = mongoose.model("users", userSchema);

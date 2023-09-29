@@ -142,12 +142,59 @@ module.exports.getAllPropertyAds = async (req, res, next) => {
       // propertyStatus: "active",
       isListed: true,
     });
+    console.log(property.length);
+    if (property.length === 0) {
+      return res
+        .status(404)
+        .json({ status: false, message: "no property found!" });
+    }
+    return res.json({ status: true, property });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};
+
+module.exports.getAllRentListing = async (req, res, next) => {
+  try {
+    const property = await Property.find({
+      purpose: "Rent",
+    });
     if (!property) {
       return res
         .status(404)
         .json({ status: false, message: "no property found!" });
     }
     return res.json({ status: true, property });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};
+
+module.exports.rentAllPropertyOwners = async (req, res, next) => {
+  try {
+    const { propertyId } = req.body;
+    if (!propertyId) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No property id is provided!" });
+    }
+    const property = await Property.findById(propertyId);
+    const owners = [];
+    const amounts = [];
+    const rentPrice = parseFloat(property.rentPrice); // Assuming rentPrice is in Ether
+
+    property.propertyOwner.forEach((owner) => {
+      owners.push(owner.ownerAddress);
+      const amount =
+        (parseFloat(owner.tokenHolder) / property.totalTokens) * rentPrice;
+      console.log(amount * 10 ** 18);
+      amounts.push((amount * 10 ** 18).toString()); // Convert to Wei
+    });
+
+    // Send the prepared data as response
+    return res.json({ status: true, owners, amounts });
   } catch (error) {
     return res.json({ status: false, message: error.message });
     next(ex);
@@ -281,7 +328,7 @@ module.exports.buyPropertyToken = async (req, res, next) => {
         (address) => address !== ownerWalletAddress
       );
     }
-
+    property.isListed = false;
     const savedProperty = await property.save();
     if (!savedProperty) {
       res.status(500).json({ status: false, message: "Error Occurred!" });

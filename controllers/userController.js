@@ -23,7 +23,7 @@ module.exports.register = async (req, res, next) => {
     delete userObject.password;
     return res.json({ status: true, user: userObject });
   } catch (ex) {
-    return res.json({ status: false, error: ex.message });
+    return res.json({ status: false, message: ex.message });
     next(ex);
   }
 };
@@ -59,7 +59,7 @@ module.exports.login = async (req, res, next) => {
       token: `Bearer ${generateToken(user._id.toString())}`,
     });
   } catch (ex) {
-    return res.json({ status: false, error: ex.message });
+    return res.json({ status: false, message: ex.message });
     next(ex);
   }
 };
@@ -69,7 +69,7 @@ module.exports.getAllUsers = async (req, res, next) => {
     const users = await User.find();
     return res.json({ status: true, users });
   } catch (ex) {
-    return res.status(400).json({ status: false, error: ex.message });
+    return res.status(400).json({ status: false, message: ex.message });
     next(ex);
   }
 };
@@ -81,11 +81,11 @@ module.exports.getMyProfile = async (req, res, next) => {
     if (!user) {
       return res
         .status(404)
-        .json({ status: false, error: "No user found of this id" });
+        .json({ status: false, message: "No user found of this id" });
     }
     return res.json({ status: true, user });
   } catch (ex) {
-    return res.json({ status: false, error: ex.message });
+    return res.json({ status: false, message: ex.message });
     next(ex);
   }
 };

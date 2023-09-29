@@ -38,6 +38,16 @@ const propertySchema = new mongoose.Schema({
     require: true,
   },
 
+  // buy, rent
+  purpose: {
+    type: String,
+    required: true,
+  },
+
+  rentPrice: {
+    type: String,
+  },
+
   // orienten must be in of the following: north, south, east, west
 
   bedroom: {

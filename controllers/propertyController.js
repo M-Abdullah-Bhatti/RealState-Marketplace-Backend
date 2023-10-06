@@ -8,6 +8,58 @@ module.exports.registerProperty = async (req, res, next) => {
         .status(400)
         .json({ status: false, message: "wallet address is not given" });
     }
+
+    // Storing Property Images In cloudinary
+    let propertyImages = []
+
+    if (typeof req.body.propertyImages === 'string') {
+        propertyImages.push(req.body.propertyImages)
+    } else {
+        propertyImages = req.body.propertyImages
+    }
+
+    const propertyImagesLinks = []
+
+    for (let i = 0; i < propertyImages.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(propertyImages[i], {
+            folder: 'propertyImages',
+        })
+
+        propertyImagesLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+        })
+    }
+
+    req.body.propertyImages = propertyImagesLinks
+
+
+     // Storing Property Document Images In cloudinary
+    let propertyDocuments = []
+
+    if (typeof req.body.propertyDocuments === 'string') {
+        propertyDocuments.push(req.body.propertyDocuments)
+    } else {
+        propertyDocuments = req.body.propertyDocuments
+    }
+
+    const propertyDocumentsLinks = []
+
+    for (let i = 0; i < propertyDocuments.length; i++) {
+        const result = await cloudinary.v2.uploader.upload(propertyDocuments[i], {
+            folder: 'propertyDocuments',
+        })
+
+        propertyDocumentsLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+        })
+    }
+
+    req.body.propertyDocuments = propertyDocumentsLinks
+
+    // ==================================================
+
     let owner = [
       {
         ownerAddress: req.body.walletAddress,
@@ -16,6 +68,7 @@ module.exports.registerProperty = async (req, res, next) => {
       },
     ];
     req.body.propertyOwner = owner;
+    
     const property = await Property.create(req.body);
 
     if (property) {

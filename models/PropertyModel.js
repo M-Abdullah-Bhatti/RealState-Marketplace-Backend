@@ -1,44 +1,42 @@
 const mongoose = require("mongoose");
+const cloudinary = require('cloudinary')
 
 const propertySchema = new mongoose.Schema({
+
+
+  title: {
+    type: String,
+    required:true
+  },
+
+   description: {
+    type: String,
+    required: true,
+  },
+
+   address: {
+    type: String,
+    required: true,
+  },
+
+   city: {
+    type: String,
+    required: true,
+  },
+
+  country: {
+    type: String,
+    required: true,
+  },
+
+    // category must be in of the following: house, plot, flat, shops, commercial
   category: {
     type: String,
     required: true,
   },
 
-  // category must be in of the following: house, plot, flat, shops, commercial
 
-  propertyStatus: {
-    type: String,
-    default: "pending",
-  },
-
-  description: {
-    type: String,
-    required: true,
-  },
-
-  area: {
-    type: String,
-    required: true,
-  },
-
-  location: {
-    type: String,
-    required: true,
-  },
-
-  address: {
-    type: String,
-    required: true,
-  },
-
-  orienten: {
-    type: String,
-    require: true,
-  },
-
-  // buy, rent
+   // buy, rent
   purpose: {
     type: String,
     required: true,
@@ -46,20 +44,6 @@ const propertySchema = new mongoose.Schema({
 
   rentPrice: {
     type: String,
-  },
-
-  // orienten must be in of the following: north, south, east, west
-
-  bedroom: {
-    type: Number,
-  },
-
-  washroom: {
-    type: Number,
-  },
-
-  kitchen: {
-    type: Number,
   },
 
   totalTokens: {
@@ -72,6 +56,27 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
 
+
+
+
+  propertyStatus: {
+    type: String,
+    default: "pending",
+  },
+
+  bedroom: {
+    type: Number,
+  },
+
+  washroom: {
+    type: Number,
+  },
+
+  kitchen: {
+    type: Number,
+  }, 
+  
+  
   propertyOwner: [
     {
       ownerAddress: {
@@ -109,31 +114,33 @@ const propertySchema = new mongoose.Schema({
     default: false,
   },
 
-  // ignore the images and property doc image for now
 
-  // images: [
-  //   {
-  //     public_id: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //     url: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //   },
-  // ],
+   propertyImages: [
+    {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 
-  // propertyDocument: {
-  //   public_id: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   url: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  propertyDocuments: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
+
+
+ 
 });
 
 module.exports = mongoose.model("Property", propertySchema);

@@ -5,7 +5,7 @@ module.exports.registerProperty = async (req, res, next) => {
   try {
     if (!req.body.walletAddress) {
       return res
-        .status(400)
+       
         .json({ status: false, message: "wallet address is not given" });
     }
 
@@ -72,10 +72,10 @@ module.exports.registerProperty = async (req, res, next) => {
     const property = await Property.create(req.body);
 
     if (property) {
-      return res.status(200).json({ success: true, property });
+      return res.status(200).json({ status: true, property });
     }
   } catch (error) {
-    return res.json({ success: false, message: error.message });
+    return res.json({ status: false, message: error.message });
     next(ex);
   }
 };

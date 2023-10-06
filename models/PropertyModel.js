@@ -115,29 +115,32 @@ const propertySchema = new mongoose.Schema({
   },
 
 
-   propertyImages: [
-    {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
+  
 
-  propertyDocuments: {
-    public_id: {
-      type: String,
-      required: true,
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-  },
+   propertyImages: [{
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
+    }],
+
+    
+   propertyDocuments: [{
+        public_id: {
+            type: String,
+            required: true
+        },
+        url: {
+            type: String,
+            required: true
+        }
+    }],
+
+  
 
 
  

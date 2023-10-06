@@ -70,13 +70,15 @@ module.exports.registerProperty = async (req, res, next) => {
     req.body.propertyOwner = owner;
     
     const property = await Property.create(req.body);
+    console.log("property")
+    console.log(property)
 
     if (property) {
       return res.status(200).json({ status: true, property });
     }
   } catch (error) {
     return res.json({ status: false, message: error.message });
-    next(ex);
+   
   }
 };
 

@@ -2,63 +2,63 @@ const Property = require("../models/PropertyModel");
 const cloudinary = require("cloudinary");
 
 module.exports.registerProperty = async (req, res, next) => {
-      console.log("req.body")
-console.log(req.body)
+  console.log("req.body");
   try {
     if (!req.body.walletAddress) {
-      return res.json({ status: false, message: "wallet address is not given" });
+      return res.json({
+        status: false,
+        message: "wallet address is not given",
+      });
     }
 
     // Storing Property Images In cloudinary
 
+    let propertyImages = [];
 
-    let propertyImages = []
-
-    if (typeof req.body.propertyImages === 'string') {
-        propertyImages.push(req.body.propertyImages)
+    if (typeof req.body.propertyImages === "string") {
+      propertyImages.push(req.body.propertyImages);
     } else {
-        propertyImages = req.body.propertyImages
+      propertyImages = req.body.propertyImages;
     }
 
-    const propertyImagesLinks = []
+    const propertyImagesLinks = [];
 
     for (let i = 0; i < propertyImages.length; i++) {
-        const result = await cloudinary.v2.uploader.upload(propertyImages[i], {
-            folder: 'propertyImages',
-        })
+      const result = await cloudinary.v2.uploader.upload(propertyImages[i], {
+        folder: "propertyImages",
+      });
 
-        propertyImagesLinks.push({
-            public_id: result.public_id,
-            url: result.secure_url,
-        })
+      propertyImagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
     }
 
-    req.body.propertyImages = propertyImagesLinks
+    req.body.propertyImages = propertyImagesLinks;
 
+    // Storing Property Document Images In cloudinary
+    let propertyDocuments = [];
 
-     // Storing Property Document Images In cloudinary
-    let propertyDocuments = []
-
-    if (typeof req.body.propertyDocuments === 'string') {
-        propertyDocuments.push(req.body.propertyDocuments)
+    if (typeof req.body.propertyDocuments === "string") {
+      propertyDocuments.push(req.body.propertyDocuments);
     } else {
-        propertyDocuments = req.body.propertyDocuments
+      propertyDocuments = req.body.propertyDocuments;
     }
 
-    const propertyDocumentsLinks = []
+    const propertyDocumentsLinks = [];
 
     for (let i = 0; i < propertyDocuments.length; i++) {
-        const result = await cloudinary.v2.uploader.upload(propertyDocuments[i], {
-            folder: 'propertyDocuments',
-        })
+      const result = await cloudinary.v2.uploader.upload(propertyDocuments[i], {
+        folder: "propertyDocuments",
+      });
 
-        propertyDocumentsLinks.push({
-            public_id: result.public_id,
-            url: result.secure_url,
-        })
+      propertyDocumentsLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
     }
 
-    req.body.propertyDocuments = propertyDocumentsLinks
+    req.body.propertyDocuments = propertyDocumentsLinks;
 
     // ==================================================
 
@@ -70,7 +70,7 @@ console.log(req.body)
       },
     ];
     req.body.propertyOwner = owner;
-    
+
     const property = await Property.create(req.body);
     // console.log("property")
     // console.log(property)
@@ -80,7 +80,6 @@ console.log(req.body)
     }
   } catch (error) {
     return res.json({ status: false, message: error.message });
-   
   }
 };
 

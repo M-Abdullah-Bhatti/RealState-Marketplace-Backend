@@ -1,25 +1,23 @@
 const mongoose = require("mongoose");
-const cloudinary = require('cloudinary')
+const cloudinary = require("cloudinary");
 
 const propertySchema = new mongoose.Schema({
-
-
   title: {
     type: String,
-    required:true
+    required: true,
   },
 
-   description: {
+  description: {
     type: String,
     required: true,
   },
 
-   address: {
+  address: {
     type: String,
     required: true,
   },
 
-   city: {
+  city: {
     type: String,
     required: true,
   },
@@ -29,14 +27,13 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
 
-    // category must be in of the following: house, plot, flat, shops, commercial
+  // category must be in of the following: house, plot, flat, shops, commercial
   category: {
     type: String,
     required: true,
   },
 
-
-   // buy, rent
+  // buy, rent
   purpose: {
     type: String,
     required: true,
@@ -56,9 +53,6 @@ const propertySchema = new mongoose.Schema({
     required: true,
   },
 
-
-
-
   propertyStatus: {
     type: String,
     default: "pending",
@@ -74,9 +68,8 @@ const propertySchema = new mongoose.Schema({
 
   kitchen: {
     type: Number,
-  }, 
-  
-  
+  },
+
   propertyOwner: [
     {
       ownerAddress: {
@@ -114,36 +107,31 @@ const propertySchema = new mongoose.Schema({
     default: false,
   },
 
+  propertyImages: [
+    {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 
-  
-
-   propertyImages: [{
-        public_id: {
-            type: String,
-            required: true
-        },
-        url: {
-            type: String,
-            required: true
-        }
-    }],
-
-    
-   propertyDocuments: [{
-        public_id: {
-            type: String,
-            required: true
-        },
-        url: {
-            type: String,
-            required: true
-        }
-    }],
-
-  
-
-
- 
+  propertyDocuments: [
+    {
+      public_id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("Property", propertySchema);

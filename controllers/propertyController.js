@@ -2,14 +2,16 @@ const Property = require("../models/PropertyModel");
 const cloudinary = require("cloudinary");
 
 module.exports.registerProperty = async (req, res, next) => {
+      console.log("req.body")
+console.log(req.body)
   try {
     if (!req.body.walletAddress) {
-      return res
-       
-        .json({ status: false, message: "wallet address is not given" });
+      return res.json({ status: false, message: "wallet address is not given" });
     }
 
     // Storing Property Images In cloudinary
+
+
     let propertyImages = []
 
     if (typeof req.body.propertyImages === 'string') {
@@ -70,8 +72,8 @@ module.exports.registerProperty = async (req, res, next) => {
     req.body.propertyOwner = owner;
     
     const property = await Property.create(req.body);
-    console.log("property")
-    console.log(property)
+    // console.log("property")
+    // console.log(property)
 
     if (property) {
       return res.status(200).json({ status: true, property });

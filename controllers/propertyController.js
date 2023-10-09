@@ -2,7 +2,7 @@ const Property = require("../models/PropertyModel");
 const cloudinary = require("cloudinary");
 
 module.exports.registerProperty = async (req, res, next) => {
-  console.log("req.body");
+  // console.log("req.body");
   try {
     if (!req.body.walletAddress) {
       return res.json({
@@ -198,12 +198,7 @@ module.exports.getAllPropertyAds = async (req, res, next) => {
       // propertyStatus: "active",
       isListed: true,
     });
-    console.log(property.length);
-    if (property.length === 0) {
-      return res
-        .status(404)
-        .json({ status: false, message: "no property found!" });
-    }
+
     return res.json({ status: true, property });
   } catch (error) {
     return res.json({ status: false, message: error.message });
@@ -214,7 +209,7 @@ module.exports.getAllPropertyAds = async (req, res, next) => {
 module.exports.getAllRentListing = async (req, res, next) => {
   try {
     const property = await Property.find({
-      purpose: "Rent",
+      purpose: "For Rent",
     });
     if (!property) {
       return res

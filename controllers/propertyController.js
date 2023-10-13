@@ -103,6 +103,20 @@ module.exports.getAllPendingProperty = async (req, res, next) => {
   }
 };
 
+module.exports.getPropertyDetail = async (req, res, next) => {
+  try {
+    const { propertyId } = req.query;
+    if (!propertyId) {
+      return res.json({ status: false, message: "No property exists!" });
+    }
+    const property = await Property.findById(propertyId);
+    return res.json({ status: true, property });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};
+
 module.exports.updatePropertyStatus = async (req, res, next) => {
   try {
     const { id } = req.body;

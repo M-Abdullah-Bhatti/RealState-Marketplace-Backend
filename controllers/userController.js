@@ -50,12 +50,9 @@ module.exports.login = async (req, res, next) => {
       });
     }
 
-    const userObject = user.toObject();
-    delete userObject.password;
-
     return res.json({
       status: true,
-      user: userObject,
+      userId: user._id,
       token: `Bearer ${generateToken(user._id.toString())}`,
     });
   } catch (ex) {

@@ -408,3 +408,47 @@ module.exports.buyPropertyToken = async (req, res, next) => {
     next(ex);
   }
 };
+
+module.exports.getAllMyPendingProperties = async (req, res, next) => {
+  try {
+    const { userId, walletAddress } = req.query;
+    if (!userId || !walletAddress) {
+      return res.json({ status: false, message: "Insufficient details" });
+    }
+
+    const properties = await Property.find({
+      userId: userId,
+      propertyOwner: {
+        $elemMatch: { ownerAddress: walletAddress },
+      },
+      propertyStatus: "pending",
+    });
+
+    return res.json({ status: true, properties });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};
+
+module.exports.getAllMyActiveProperties = async (req, res, next) => {
+  try {
+    const { userId, walletAddress } = req.query;
+    if (!userId || !walletAddress) {
+      return res.json({ status: false, message: "Insufficient details" });
+    }
+
+    const properties = await Property.find({
+      userId: userId,
+      propertyOwner: {
+        $elemMatch: { ownerAddress: walletAddress },
+      },
+      propertyStatus: "active",
+    });
+
+    return res.json({ status: true, properties });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};

@@ -86,3 +86,30 @@ module.exports.getMyProfile = async (req, res, next) => {
     next(ex);
   }
 };
+
+module.exports.editMyProfile = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { username, email, phoneNo } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: false, message: "No user found of this id" });
+    }
+
+    // Update the user's details
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.phoneNumber = phoneNo || user.phoneNumber;
+
+    await user.save();
+
+    return res.json({ status: true, user });
+  } catch (ex) {
+    return res.json({ status: false, message: ex.message });
+    
+  }
+};

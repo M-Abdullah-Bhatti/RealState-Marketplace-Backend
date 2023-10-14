@@ -208,10 +208,14 @@ module.exports.postPropertyAd = async (req, res, next) => {
 
 module.exports.getAllPropertyAds = async (req, res, next) => {
   try {
+    const categoryfilter = req.query.category
+      ? { category: req.query.category }
+      : {};
+
     const property = await Property.find({
       // propertyStatus: "active",
       isListed: true,
-    });
+    }).find(categoryfilter);
 
     return res.json({ status: true, property });
   } catch (error) {
@@ -222,9 +226,13 @@ module.exports.getAllPropertyAds = async (req, res, next) => {
 
 module.exports.getAllRentListing = async (req, res, next) => {
   try {
+    const categoryfilter = req.query.category
+      ? { category: req.query.category }
+      : {};
+
     const property = await Property.find({
       purpose: "For Rent",
-    });
+    }).find(categoryfilter);
     if (!property) {
       return res
         .status(404)

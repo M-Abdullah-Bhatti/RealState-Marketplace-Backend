@@ -449,6 +449,16 @@ module.exports.getAllMyActiveProperties = async (req, res, next) => {
     return res.json({ status: true, properties });
   } catch (error) {
     return res.json({ status: false, message: error.message });
-    next(ex);
   }
 };
+
+
+module.exports.getAllPropertiesCities = async (req, res, next) =>
+{
+  try {
+    const cities = await Property.distinct('city');
+    return res.json({ status: true, cities });
+  } catch (error) {
+    return res.status(500).json({ status: false, message: error.message });
+  }
+}

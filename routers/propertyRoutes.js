@@ -12,6 +12,7 @@ const {
   getPropertyDetail,
   getAllMyPendingProperties,
   getAllMyActiveProperties,
+  takePropertyOnRent,
 } = require("../controllers/propertyController");
 
 //    const {isAuthenticatedUser, isAdmin} = require("../middleware/authenticate")
@@ -31,5 +32,6 @@ router.post("/post-ad", postPropertyAd);
 router.post("/check-buy", checkToBuyPropertyToken);
 router.post("/buy-token", buyPropertyToken);
 router.put("/fundAllOwners", rentAllPropertyOwners);
+router.post("/takeRent", takePropertyOnRent);
 
 module.exports = router;

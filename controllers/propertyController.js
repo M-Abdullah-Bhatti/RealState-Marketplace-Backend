@@ -238,6 +238,7 @@ module.exports.getAllRentListing = async (req, res, next) => {
 
     const property = await Property.find({
       purpose: "For Rent",
+      isRented: "false",
     }).find(categoryfilter);
     if (!property) {
       return res
@@ -464,5 +465,43 @@ module.exports.getAllMyActiveProperties = async (req, res, next) => {
   } catch (error) {
     return res.json({ status: false, message: error.message });
     next(ex);
+  }
+};
+
+module.exports.takePropertyOnRent = async (req, res, next) => {
+  try {
+    const { walletAddress, propertyId } = req.body;
+
+    // Move the check for walletAddress here, and check if propertyId exists
+    if (!propertyId || !walletAddress) {
+      return res.status(400).json({
+        status: false,
+        message: "Insufficient details!",
+      });
+    }
+
+    const property = await Property.findById(propertyId);
+
+    if (!property) {
+      return res.status(404).json({
+        status: false,
+        message: "Property with this id is not found!",
+      });
+    }
+
+    property.isRented = true;
+    property.rentedTo = walletAddress;
+    const savedProperty = await property.save();
+    if (!savedProperty) {
+      return res
+        .status(500)
+        .json({ status: false, message: "Error Occurred!" });
+    }
+    return res.status(200).json({
+      status: true,
+      message: "You have successfully taken this property on rent!",
+    });
+  } catch (error) {
+    return res.status(500).json({ status: false, message: error.message });
   }
 };

@@ -140,14 +140,14 @@ module.exports.updatePropertyStatus = async (req, res, next) => {
 module.exports.postPropertyAd = async (req, res, next) => {
   try {
     const { walletAddress, propertyId, tokensQuantity, tokenPrice } = req.body;
-    let matchedLenght = 0;
-    let alreadyListed = 0;
-    let insufficientTokens;
+    let matchedLength = 0;
+    let alreadyListed = false;
+    let insufficientTokens = false;
 
-    if ((!walletAddress, !propertyId, !tokensQuantity, !tokenPrice)) {
+    if (!walletAddress || !propertyId || !tokensQuantity || !tokenPrice) {
       return res
         .status(400)
-        .json({ status: false, message: "Insufficient Credientials" });
+        .json({ status: false, message: "Insufficient Credentials" });
     }
 
     const property = await Property.findById(propertyId);
@@ -161,22 +161,38 @@ module.exports.postPropertyAd = async (req, res, next) => {
 
     property.propertyOwner.forEach((item) => {
       if (walletAddress === item.ownerAddress) {
-        matchedLenght += 1;
+        matchedLength += 1;
 
         if (Number(tokensQuantity) > Number(item.tokenHolder)) {
           insufficientTokens = true;
+        } else {
+          item.currentListedTokens = tokensQuantity;
+          item.perTokenPrice = tokenPrice;
+          item.tokenHolder = (
+            Number(item.tokenHolder) - Number(tokensQuantity)
+          ).toString();
         }
-        item.currentListedTokens = tokensQuantity;
-        item.perTokenPrice = tokenPrice;
       }
     });
 
-    if (matchedLenght === 0) {
+    if (matchedLength === 0) {
       return res.status(404).json({
         status: false,
         message: "You are not the owner of this property!",
       });
     }
+
+    property.listedBy.forEach((item) => {
+      if (item === walletAddress) {
+        alreadyListed = true;
+      }
+    });
+
+    if (!alreadyListed) {
+      property.listedBy.push(walletAddress);
+    }
+
+    property.isListed = true;
 
     if (insufficientTokens) {
       return res
@@ -184,25 +200,15 @@ module.exports.postPropertyAd = async (req, res, next) => {
         .json({ status: false, message: "You have insufficient Tokens!" });
     }
 
-    property.listedBy.forEach((item) => {
-      if (item === walletAddress) {
-        alreadyListed = 1;
-      }
-    });
-
-    if (alreadyListed !== 1) {
-      property.listedBy.push(walletAddress);
-    }
-
-    property.isListed = true;
-
     const savedProperty = await property.save();
     if (savedProperty) {
       return res.status(200).json({ success: true, savedProperty });
     }
   } catch (error) {
-    return res.json({ status: false, message: error.message });
-    next(ex);
+    console.error(error);
+    return res
+      .status(500)
+      .json({ status: false, message: "Internal Server Error" });
   }
 };
 

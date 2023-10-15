@@ -517,3 +517,23 @@ module.exports.getAllPropertiesCities = async (req, res, next) =>
     return res.status(500).json({ status: false, message: error.message });
   }
 }
+
+module.exports.getAllSearchedProperties = async (req, res, next) =>
+{
+  const {city, category, purpose}  = req.query
+  try {
+    const properties = await Property.find(
+      {
+        "$and":[
+          {city : { $regex :city } },
+          {category : { $regex :category } },
+          {purpose : { $regex :purpose } },
+        ]
+      }
+    );
+    return res.json({ status: true, properties });
+  } catch (error) {
+    return res.status(500).json({ status: false, message: error.message });
+  }
+}
+

@@ -107,6 +107,15 @@ const propertySchema = new mongoose.Schema({
     default: false,
   },
 
+  isRented: {
+    type: Boolean,
+    default: false,
+  },
+
+  rentedTo: {
+    type: String,
+  },
+
   propertyImages: [
     {
       public_id: {

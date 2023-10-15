@@ -12,6 +12,7 @@ const {
   getPropertyDetail,
   getAllMyPendingProperties,
   getAllMyActiveProperties,
+  takePropertyOnRent,
   getAllPropertiesCities
 } = require("../controllers/propertyController");
 
@@ -33,6 +34,6 @@ router.post("/check-buy", checkToBuyPropertyToken);
 router.post("/buy-token", buyPropertyToken);
 router.put("/fundAllOwners", rentAllPropertyOwners);
 router.get("/cities", getAllPropertiesCities);
-
+router.post("/takeRent", takePropertyOnRent);
 
 module.exports = router;

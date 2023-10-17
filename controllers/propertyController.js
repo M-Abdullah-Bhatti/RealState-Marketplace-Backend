@@ -238,7 +238,7 @@ module.exports.getAllRentListing = async (req, res, next) => {
 
     const property = await Property.find({
       purpose: "For Rent",
-      isRented: "false",
+      isRented: false,
     }).find(categoryfilter);
     if (!property) {
       return res

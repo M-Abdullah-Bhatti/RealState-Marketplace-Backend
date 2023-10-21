@@ -432,11 +432,17 @@ module.exports.getAllMyPendingProperties = async (req, res, next) => {
     }
 
     const properties = await Property.find({
-      userId: userId,
-      propertyOwner: {
-        $elemMatch: { ownerAddress: walletAddress },
-      },
-      propertyStatus: "pending",
+      $or: [
+        {
+          userId: userId,
+          propertyOwner: {
+            $elemMatch: { ownerAddress: walletAddress },
+          },
+        },
+        {
+          propertyStatus: "pending",
+        },
+      ],
     });
 
     return res.json({ status: true, properties });
@@ -454,11 +460,17 @@ module.exports.getAllMyActiveProperties = async (req, res, next) => {
     }
 
     const properties = await Property.find({
-      userId: userId,
-      propertyOwner: {
-        $elemMatch: { ownerAddress: walletAddress },
-      },
-      propertyStatus: "active",
+      $or: [
+        {
+          propertyStatus: "active",
+        },
+        {
+          userId: userId,
+          propertyOwner: {
+            $elemMatch: { ownerAddress: walletAddress },
+          },
+        },
+      ],
     });
 
     return res.json({ status: true, properties });
@@ -466,8 +478,6 @@ module.exports.getAllMyActiveProperties = async (req, res, next) => {
     return res.json({ status: false, message: error.message });
   }
 };
-
-
 
 module.exports.takePropertyOnRent = async (req, res, next) => {
   try {
@@ -507,33 +517,27 @@ module.exports.takePropertyOnRent = async (req, res, next) => {
   }
 };
 
-
-module.exports.getAllPropertiesCities = async (req, res, next) =>
-{
+module.exports.getAllPropertiesCities = async (req, res, next) => {
   try {
-    const cities = await Property.distinct('city');
+    const cities = await Property.distinct("city");
     return res.json({ status: true, cities });
   } catch (error) {
     return res.status(500).json({ status: false, message: error.message });
   }
-}
+};
 
-module.exports.getAllSearchedProperties = async (req, res, next) =>
-{
-  const {city, category, purpose}  = req.query
+module.exports.getAllSearchedProperties = async (req, res, next) => {
+  const { city, category, purpose } = req.query;
   try {
-    const properties = await Property.find(
-      {
-        "$and":[
-          {city : { $regex :city } },
-          {category : { $regex :category } },
-          {purpose : { $regex :purpose } },
-        ]
-      }
-    );
+    const properties = await Property.find({
+      $and: [
+        { city: { $regex: city } },
+        { category: { $regex: category } },
+        { purpose: { $regex: purpose } },
+      ],
+    });
     return res.json({ status: true, properties });
   } catch (error) {
     return res.status(500).json({ status: false, message: error.message });
   }
-}
-
+};

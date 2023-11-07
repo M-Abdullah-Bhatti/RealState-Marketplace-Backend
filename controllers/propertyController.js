@@ -344,7 +344,14 @@ module.exports.buyPropertyToken = async (req, res, next) => {
       currentListedTokens,
       perTokenPrice,
     } = req.body;
-
+    console.log(
+      "--",
+      walletAddress,
+      propertyId,
+      ownerWalletAddress,
+      currentListedTokens,
+      perTokenPrice
+    );
     const property = await Property.findById(propertyId);
 
     if (!property) {
@@ -427,44 +434,62 @@ module.exports.buyPropertyToken = async (req, res, next) => {
 module.exports.getAllMyPendingProperties = async (req, res, next) => {
   try {
     const { userId, walletAddress } = req.query;
-    if (!userId || !walletAddress) {
+
+    let searchCriteria = {
+      propertyStatus: "pending",
+      $or: [],
+    };
+
+    if (userId) {
+      searchCriteria.$or.push({ userId: userId });
+    }
+
+    if (walletAddress) {
+      searchCriteria.$or.push({ "propertyOwner.ownerAddress": walletAddress });
+    }
+
+    // If neither userId nor walletAddress is provided, send an error response
+    if (searchCriteria.$or.length === 0) {
       return res.json({ status: false, message: "Insufficient details" });
     }
 
-    const properties = await Property.find({
-      userId: userId,
-      propertyOwner: {
-        $elemMatch: { ownerAddress: walletAddress },
-      },
-      propertyStatus: "pending",
-    });
+    const properties = await Property.find(searchCriteria);
 
     return res.json({ status: true, properties });
   } catch (error) {
+    console.error(error);
     return res.json({ status: false, message: error.message });
-    next(ex);
   }
 };
 
 module.exports.getAllMyActiveProperties = async (req, res, next) => {
   try {
     const { userId, walletAddress } = req.query;
-    if (!userId || !walletAddress) {
+
+    let searchCriteria = {
+      propertyStatus: "active",
+      $or: [],
+    };
+
+    if (userId) {
+      searchCriteria.$or.push({ userId: userId });
+    }
+
+    if (walletAddress) {
+      searchCriteria.$or.push({ "propertyOwner.ownerAddress": walletAddress });
+    }
+
+    // If neither userId nor walletAddress is provided, send an error response
+    if (searchCriteria.$or.length === 0) {
       return res.json({ status: false, message: "Insufficient details" });
     }
 
-    const properties = await Property.find({
-      userId: userId,
-      propertyOwner: {
-        $elemMatch: { ownerAddress: walletAddress },
-      },
-      propertyStatus: "active",
-    });
+    const properties = await Property.find(searchCriteria);
 
     return res.json({ status: true, properties });
   } catch (error) {
+    console.error(error);
     return res.json({ status: false, message: error.message });
-    next(ex);
   }
 };
 

@@ -341,7 +341,14 @@ module.exports.buyPropertyToken = async (req, res, next) => {
       currentListedTokens,
       perTokenPrice,
     } = req.body;
-
+    console.log(
+      "--",
+      walletAddress,
+      propertyId,
+      ownerWalletAddress,
+      currentListedTokens,
+      perTokenPrice
+    );
     const property = await Property.findById(propertyId);
 
     if (!property) {
@@ -420,58 +427,42 @@ module.exports.buyPropertyToken = async (req, res, next) => {
     next(ex);
   }
 };
-
 module.exports.getAllMyPendingProperties = async (req, res, next) => {
   try {
-    const { userId, walletAddress } = req.query;
-    if (!userId || !walletAddress) {
-      return res.json({ status: false, message: "Insufficient details" });
+    const { walletAddress } = req.query;
+
+    if (!walletAddress) {
+      return res.json({ status: false, message: "Wallet address is required" });
     }
 
     const properties = await Property.find({
-      $or: [
-        {
-          userId: userId,
-          propertyOwner: {
-            $elemMatch: { ownerAddress: walletAddress },
-          },
-        },
-        {
-          propertyStatus: "pending",
-        },
-      ],
+      propertyStatus: "pending",
+      "propertyOwner.ownerAddress": walletAddress,
     });
 
     return res.json({ status: true, properties });
   } catch (error) {
+    console.error(error);
     return res.json({ status: false, message: error.message });
-    next(ex);
   }
 };
 
 module.exports.getAllMyActiveProperties = async (req, res, next) => {
   try {
-    const { userId, walletAddress } = req.query;
-    if (!userId || !walletAddress) {
-      return res.json({ status: false, message: "Insufficient details" });
+    const { walletAddress } = req.query;
+
+    if (!walletAddress) {
+      return res.json({ status: false, message: "Wallet address is required" });
     }
 
     const properties = await Property.find({
-      $or: [
-        {
-          propertyStatus: "active",
-        },
-        {
-          userId: userId,
-          propertyOwner: {
-            $elemMatch: { ownerAddress: walletAddress },
-          },
-        },
-      ],
+      propertyStatus: "active",
+      "propertyOwner.ownerAddress": walletAddress,
     });
 
     return res.json({ status: true, properties });
   } catch (error) {
+    console.error(error);
     return res.json({ status: false, message: error.message });
   }
 };

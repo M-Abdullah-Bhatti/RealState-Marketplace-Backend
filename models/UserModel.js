@@ -16,10 +16,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  phoneNumber: {
-    type: Number,
-    required: true,
-    unique: true,
+  image: {
+    public_id: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
   },
   role: {
     type: String,

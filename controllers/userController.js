@@ -89,14 +89,24 @@ module.exports.getMyProfile = async (req, res, next) => {
 
 module.exports.editMyProfile = async (req, res, next) => {
   try {
-    const { username, email, phoneNumber, userId } = req.body;
+    const { username, email, phoneNumber, userId, image } = req.body;
+
+    // console.log("image: ", image);
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
+      folder: "avatars",
+    });
 
     console.log(req.body);
 
     // Update the user's details using findByIdAndUpdate
     const user = await User.findByIdAndUpdate(
       userId,
-      { username, email, phoneNumber },
+      {
+        username,
+        email,
+        phoneNumber,
+        image: { public_id: myCloud.public_id, url: myCloud.secure_url },
+      },
       { new: true, runValidators: true }
     );
 

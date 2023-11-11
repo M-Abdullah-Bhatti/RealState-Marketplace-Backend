@@ -16,8 +16,4 @@ router.get("/all-users", getAllUsers);
 router.get("/profile", getMyProfile);
 router.put("/profile-update", editMyProfile);
 
-// router.get("/all-users", isAdmin, getAllUsers);
-//   router.get("/all_pending_users",isAdmin, getAllPendingUsers);
-//   router.put("/update_user_status",isAdmin, updateUserStatus);
-
 module.exports = router;

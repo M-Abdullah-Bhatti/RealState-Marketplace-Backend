@@ -3,7 +3,7 @@ const {
   login,
   getAllUsers,
   getMyProfile,
-  editMyProfile
+  editMyProfile,
 } = require("../controllers/userController");
 
 const { isAuthenticatedUser, isAdmin } = require("../middleware/authenticate");
@@ -14,7 +14,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.get("/all-users", getAllUsers);
 router.get("/profile", getMyProfile);
-router.put("/profile-update/:userId", editMyProfile);
+router.put("/profile-update", editMyProfile);
 
 // router.get("/all-users", isAdmin, getAllUsers);
 //   router.get("/all_pending_users",isAdmin, getAllPendingUsers);

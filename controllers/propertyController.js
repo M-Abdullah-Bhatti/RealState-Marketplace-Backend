@@ -168,9 +168,6 @@ module.exports.postPropertyAd = async (req, res, next) => {
         } else {
           item.currentListedTokens = tokensQuantity;
           item.perTokenPrice = tokenPrice;
-          item.tokenHolder = (
-            Number(item.tokenHolder) - Number(tokensQuantity)
-          ).toString();
         }
       }
     });
@@ -528,6 +525,7 @@ module.exports.getAllPropertiesCities = async (req, res, next) => {
 
 module.exports.getAllSearchedProperties = async (req, res, next) => {
   const { city, category, purpose } = req.query;
+  console.log("--", city, category, purpose);
   try {
     const properties = await Property.find({
       $and: [
@@ -536,6 +534,8 @@ module.exports.getAllSearchedProperties = async (req, res, next) => {
         { purpose: { $regex: purpose } },
       ],
     });
+
+    console.log("prop: ", properties);
     return res.json({ status: true, properties });
   } catch (error) {
     return res.status(500).json({ status: false, message: error.message });

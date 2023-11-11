@@ -19,11 +19,11 @@ cloudinary.config({
 
 const userRoute = require("./routers/userRoutes");
 const propertyRoute = require("./routers/propertyRoutes");
-const contactRoute = require("./routers/contactRouter");
+const requestRoute = require("./routers/requestRouter");
 
 app.use("/api/user", userRoute);
 app.use("/api/property", propertyRoute);
-app.use("/api/contact", contactRoute);
+app.use("/api/request", requestRoute);
 
 //database connection
 mongoose

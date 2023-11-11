@@ -2,7 +2,7 @@ const {
   postRequest,
   getAllRequests,
   getSingleRequest,
-} = require("../controllers/contactController");
+} = require("../controllers/requestController");
 
 const router = require("express").Router();
 

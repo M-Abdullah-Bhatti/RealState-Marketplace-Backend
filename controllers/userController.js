@@ -91,24 +91,26 @@ module.exports.editMyProfile = async (req, res, next) => {
   try {
     const { username, email, phoneNumber, userId, image } = req.body;
 
-    // console.log("image: ", image);
-    const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
-      folder: "avatars",
-    });
+    let imageUpload = null;
 
-    console.log(req.body);
+    // Check if the type of image is a string
+    if (typeof image === "string" && image !== "") {
+      const myCloud = await cloudinary.v2.uploader.upload(image, {
+        folder: "avatars",
+      });
+      imageUpload = { public_id: myCloud.public_id, url: myCloud.secure_url };
+    }
 
     // Update the user's details using findByIdAndUpdate
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {
-        username,
-        email,
-        phoneNumber,
-        image: { public_id: myCloud.public_id, url: myCloud.secure_url },
-      },
-      { new: true, runValidators: true }
-    );
+    const updateData = { username, email, phoneNumber };
+    if (imageUpload) {
+      updateData.image = imageUpload;
+    }
+
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!user) {
       return res
@@ -118,6 +120,7 @@ module.exports.editMyProfile = async (req, res, next) => {
 
     return res.json({ status: true, user });
   } catch (ex) {
+    console.log("error: ", ex);
     return res.json({ status: false, message: ex.message });
   }
 };

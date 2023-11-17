@@ -23,6 +23,7 @@ module.exports.register = async (req, res, next) => {
     delete userObject.password;
     return res.json({ status: true, user: userObject });
   } catch (ex) {
+    console.log("err", ex);
     return res.json({ status: false, message: ex.message });
     next(ex);
   }

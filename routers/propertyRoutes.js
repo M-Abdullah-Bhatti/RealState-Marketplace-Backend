@@ -14,7 +14,8 @@ const {
   getAllMyActiveProperties,
   takePropertyOnRent,
   getAllPropertiesCities,
-  getAllSearchedProperties
+  getAllSearchedProperties,
+  getAllRentListingForAdmin,
 } = require("../controllers/propertyController");
 
 //    const {isAuthenticatedUser, isAdmin} = require("../middleware/authenticate")
@@ -37,5 +38,6 @@ router.put("/fundAllOwners", rentAllPropertyOwners);
 router.get("/cities", getAllPropertiesCities);
 router.get("/search-properties", getAllSearchedProperties);
 router.post("/takeRent", takePropertyOnRent);
+router.get("/rentlisting-admin", getAllRentListingForAdmin);
 
 module.exports = router;

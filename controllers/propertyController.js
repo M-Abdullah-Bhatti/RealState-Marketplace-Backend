@@ -532,3 +532,25 @@ module.exports.getAllSearchedProperties = async (req, res, next) => {
     return res.status(500).json({ status: false, message: error.message });
   }
 };
+
+module.exports.getAllRentListingForAdmin = async (req, res, next) => {
+  try {
+    const categoryfilter = req.query.category
+      ? { category: req.query.category }
+      : {};
+
+    const property = await Property.find({
+      purpose: "For Rent",
+      propertyStatus: "active",
+    }).find(categoryfilter);
+    if (!property) {
+      return res
+        .status(404)
+        .json({ status: false, message: "no property found!" });
+    }
+    return res.json({ status: true, property });
+  } catch (error) {
+    return res.json({ status: false, message: error.message });
+    next(ex);
+  }
+};

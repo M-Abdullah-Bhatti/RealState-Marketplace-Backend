@@ -18,7 +18,6 @@ const {
   getAllRentListingForAdmin,
 } = require("../controllers/propertyController");
 
-//    const {isAuthenticatedUser, isAdmin} = require("../middleware/authenticate")
 
 const router = require("express").Router();
 

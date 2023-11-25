@@ -62,6 +62,46 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
+module.exports.adminLogin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        message: "Incorrect email or password",
+        status: false,
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.json({
+        message: "Incorrect email or password",
+        status: false,
+      });
+    }
+
+    if (user.role != "admin") {
+      return res.json({
+        message: "You are not admin",
+        status: false,
+      });
+    }
+
+    return res.json({
+      status: true,
+      userId: user._id,
+      token: `Bearer ${generateToken(user._id.toString())}`,
+    });
+  } catch (ex) {
+    return res.json({ status: false, message: ex.message });
+    next(ex);
+  }
+};
+
 module.exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
